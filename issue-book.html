@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Issue Book</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="issue-book">
+        <h1>Issue Book</h1>
+        
+        <form id="issueBookForm">
+            <label for="bookName">Book Name:</label>
+            <input type="text" id="bookName" name="bookName" readonly>
+            <br><br>
+            
+            <label for="authorName">Author Name:</label>
+            <input type="text" id="authorName" name="authorName" readonly>
+            <br><br>
+            
+            <label for="issueDate">Issue Date:</label>
+            <input type="date" id="issueDate" name="issueDate" required>
+            <br><br>
+            
+            <label for="returnDate">Return Date:</label>
+            <input type="date" id="returnDate" name="returnDate">
+            <br><br>
+            
+            <label for="remarks">Remarks:</label>
+            <textarea id="remarks" name="remarks" rows="4" cols="50"></textarea>
+            <br><br>
+            
+            <button type="submit">Issue Book</button>
+        </form>
+
+        <button id="logoutBtn">Log Out</button>
+    </div>
+
+    <script>
+        // Function to get query parameters from the URL
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        // Get book details from query parameters
+        const bookName = getQueryParam('bookName');
+        const category = getQueryParam('category');
+
+        // Display book details in the form
+        document.getElementById('bookName').value = bookName;
+        document.getElementById('authorName').value = 'Author Name for ' + bookName; // Update with actual author data if available
+
+        // Form submission
+        document.getElementById('issueBookForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const issueData = {
+                bookName: bookName,
+                authorName: document.getElementById('authorName').value,
+                issueDate: document.getElementById('issueDate').value,
+                returnDate: document.getElementById('returnDate').value,
+                remarks: document.getElementById('remarks').value
+            };
+
+            fetch('http://localhost:3000/api/issue-book', { // Update with your API URL
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(issueData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message); // Show success message from the server
+                // Optionally redirect or clear form
+                window.location.href = 'available-books.html'; // Redirect to available books page after issuing
+            })
+            .catch(error => {
+                console.error('Error issuing book:', error);
+                alert('There was an error issuing the book. Please try again.');
+            });
+        });
+
+        // Log Out
+        document.getElementById('logoutBtn').addEventListener('click', function () {
+            window.location.href = 'logout.html';
+        });
+    </script>
+</body>
+</html>

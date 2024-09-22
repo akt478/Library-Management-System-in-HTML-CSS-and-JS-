@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Home</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+            background-color: #4CAF50; /* Green */
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #45a049; /* Darker green */
+        }
+    </style>
+</head>
+<body>
+    <div class="user-home">
+        <h1>Welcome, User</h1>
+        <div>
+            <a href="available-books.html" class="button">Available Books</a>
+            <a href="transactions.html" class="button">Transactions</a>
+            <a href="reports.html" class="button">Reports</a>
+            <a href="logout.html" class="button">Logout</a>
+        </div>
+
+        <section id="productDetails">
+            <h2>Product Details</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Code No From</th>
+                        <th>Code No To</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>SC(B/M)000001</td>
+                        <td>SC(B/M)000004</td>
+                        <td>Science</td>
+                    </tr>
+                    <tr>
+                        <td>EC(B/M)000001</td>
+                        <td>EC(B/M)000004</td>
+                        <td>Economics</td>
+                    </tr>
+                    <tr>
+                        <td>FC(B/M)000001</td>
+                        <td>FC(B/M)000004</td>
+                        <td>Fiction</td>
+                    </tr>
+                    <tr>
+                        <td>CH(B/M)000001</td>
+                        <td>CH(B/M)000004</td>
+                        <td>Children</td>
+                    </tr>
+                    <tr>
+                        <td>PD(B/M)000001</td>
+                        <td>PD(B/M)000004</td>
+                        <td>Personal Development</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+</body>
+</html>

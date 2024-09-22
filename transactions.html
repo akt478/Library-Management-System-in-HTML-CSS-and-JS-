@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transactions</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="transactions">
+        <h1>Transactions</h1>
+
+        <!-- Check Book Availability Section -->
+        <section id="checkAvailability">
+            <h2>Check Book Availability</h2>
+            <form id="checkAvailabilityForm">
+                <input type="text" id="bookTitleCheck" placeholder="Book Title" required>
+                <button type="submit">Check Availability</button>
+            </form>
+            <p id="availabilityResult"></p>
+        </section>
+
+        <!-- Issue a Book Section -->
+        <section id="issueBook">
+            <h2>Issue a Book</h2>
+            <form id="issueBookForm">
+                <input type="text" id="issueUserName" placeholder="User Name" required>
+                <input type="text" id="issueBookTitle" placeholder="Book Title" required>
+                <button type="submit">Issue Book</button>
+            </form>
+            <p id="issueResult"></p>
+        </section>
+
+        <!-- Return a Book Section -->
+        <section id="returnBook">
+            <h2>Return a Book</h2>
+            <form id="returnBookForm">
+                <input type="text" id="returnUserName" placeholder="User Name" required>
+                <input type="text" id="returnBookTitle" placeholder="Book Title" required>
+                <button type="submit">Return Book</button>
+            </form>
+            <p id="returnResult"></p>
+        </section>
+
+        <!-- Pay Fine Section -->
+        <section id="payFine">
+            <h2>Pay Fine</h2>
+            <form id="payFineForm">
+                <input type="text" id="fineUserName" placeholder="User Name" required>
+                <input type="number" id="fineAmount" placeholder="Amount" required>
+                <button type="submit">Pay Fine</button>
+            </form>
+            <p id="fineResult"></p>
+        </section>
+    </div>
+
+    <script src="js/transactions.js"></script>
+</body>
+</html>

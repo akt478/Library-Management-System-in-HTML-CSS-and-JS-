@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List of Active Memberships</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="list-of-active-memberships">
+        <h1>List of Active Memberships</h1>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Membership Id</th>
+                    <th>Name of Member</th>
+                    <th>Contact Number</th>
+                    <th>Contact Address</th>
+                    <th>Aadhar Card No</th>
+                    <th>Start Date of Membership</th>
+                    <th>End Date of Membership</th>
+                    <th>Status (Active/Inactive)</th>
+                    <th>Amount Pending (Fine)</th>
+                </tr>
+            </thead>
+            <tbody id="membershipTableBody">
+                <!-- Membership data will be inserted here -->
+            </tbody>
+        </table>
+
+        <button id="logoutBtn">Log Out</button>
+    </div>
+
+    <script>
+        // Fetch active memberships from the database
+        function fetchActiveMemberships() {
+            fetch('http://localhost:3000/api/memberships') // Update with your API URL
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.getElementById('membershipTableBody');
+                    tableBody.innerHTML = ''; // Clear existing rows
+
+                    data.forEach(membership => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${membership.id}</td>
+                            <td>${membership.name}</td>
+                            <td>${membership.contactNumber}</td>
+                            <td>${membership.contactAddress}</td>
+                            <td>${membership.aadharCardNo}</td>
+                            <td>${membership.startDate}</td>
+                            <td>${membership.endDate}</td>
+                            <td>${membership.status}</td>
+                            <td>${membership.amountPending}</td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching memberships:', error);
+                    alert('There was an error fetching the membership data. Please try again.');
+                });
+        }
+
+        // Call the function to fetch memberships when the page loads
+        window.onload = fetchActiveMemberships;
+
+        // Log Out
+        document.getElementById('logoutBtn').addEventListener('click', function () {
+            window.location.href = 'logout.html';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Active Issues</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="active-issues">
+        <h1>Active Issues</h1>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Serial No Book/Movie</th>
+                    <th>Name of Book/Movie</th>
+                    <th>Membership Id</th>
+                    <th>Date of Issue</th>
+                    <th>Date of Return</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>001</td>
+                    <td>The Great Gatsby</td>
+                    <td>M001</td>
+                    <td>2024-01-15</td>
+                    <td>2024-02-15</td>
+                </tr>
+                <tr>
+                    <td>002</td>
+                    <td>Inception</td>
+                    <td>M002</td>
+                    <td>2024-01-20</td>
+                    <td>2024-02-20</td>
+                </tr>
+                <!-- Add more rows as needed -->
+            </tbody>
+        </table>
+
+        <button id="logoutBtn">Log Out</button>
+    </div>
+
+    <script>
+        // Log Out
+        document.getElementById('logoutBtn').addEventListener('click', function () {
+            window.location.href = 'logout.html';
+        });
+    </script>
+</body>
+</html>

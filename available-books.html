@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Books</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="available-books">
+        <h1>Available Books</h1>
+
+        <!-- Search for Book -->
+        <section id="bookSearch">
+            <h2>Is Book Available?</h2>
+            <input type="text" id="bookSearchInput" placeholder="Enter Book Name">
+            <button id="searchBookBtn">Search</button>
+            <div id="searchResults"></div>
+        </section>
+
+        <!-- Issue a Book -->
+        <section id="issueBookSection">
+            <h2>Issue Book</h2>
+            <label for="bookNameIssue">Enter Book Name</label>
+            <input type="text" id="bookNameIssue" placeholder="Book Name">
+            <br><br>
+            <label for="categoryDropdownIssue">Select Category</label>
+            <select id="categoryDropdownIssue">
+                <option value="Science">Science</option>
+                <option value="Economics">Economics</option>
+                <option value="Fiction">Fiction</option>
+                <option value="Children">Children</option>
+                <option value="Personal Development">Personal Development</option>
+            </select>
+            <button id="issueBookBtn">Issue Book</button>
+        </section>
+
+        <!-- Return a Book -->
+        <section id="returnBookSection">
+            <h2>Return Book</h2>
+            <label for="authorNameReturn">Enter Author Name</label>
+            <input type="text" id="authorNameReturn" placeholder="Author Name">
+            <br><br>
+            <label for="serialNumberReturn">Enter Serial Number</label>
+            <input type="text" id="serialNumberReturn" placeholder="Serial Number">
+            <br><br>
+            <button id="returnBookBtn">Return Book</button>
+        </section>
+
+        <!-- Pay Fine -->
+        <section id="payFineSection">
+            <h2>Pay Fine</h2>
+            <label for="fineSerialNumber">Enter Serial Number</label>
+            <input type="text" id="fineSerialNumber" placeholder="Serial Number">
+            <br><br>
+            <button id="payFineBtn">Pay Fine</button>
+        </section>
+    </div>
+
+    <script>
+        const apiUrl = 'http://localhost:3000/api'; // Update to your API URL
+
+        // Search for a Book
+        document.getElementById('searchBookBtn').addEventListener('click', function () {
+            const bookName = document.getElementById('bookSearchInput').value;
+            if (bookName.trim() !== '') {
+                fetch(`${apiUrl}/search-book?name=${encodeURIComponent(bookName)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const resultsDiv = document.getElementById('searchResults');
+                        resultsDiv.innerHTML = '';
+
+                        if (data.length > 0) {
+                            data.forEach(book => {
+                                resultsDiv.innerHTML += `<p>${book.name} - ${book.author} - ${book.status}</p>`;
+                            });
+                        } else {
+                            resultsDiv.innerHTML = '<p>No books found.</p>';
+                        }
+                    })
+                    .catch(error => console.error('Error searching for book:', error));
+            } else {
+                alert('Please enter a book name.');
+            }
+        });
+
+        // Issue a Book
+        document.getElementById('issueBookBtn').addEventListener('click', function () {
+            const bookName = document.getElementById('bookNameIssue').value;
+            const category = document.getElementById('categoryDropdownIssue').value;
+
+            if (bookName.trim() !== '') {
+                const data = { name: bookName, category: category };
+                fetch(`${apiUrl}/issue-book`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    document.getElementById('bookNameIssue').value = ''; // Reset input
+                })
+                .catch(error => console.error('Error issuing book:', error));
+            } else {
+                alert('Please enter a book name.');
+            }
+        });
+
+        // Return a Book
+        document.getElementById('returnBookBtn').addEventListener('click', function () {
+            const authorName = document.getElementById('authorNameReturn').value;
+            const serialNumber = document.getElementById('serialNumberReturn').value;
+
+            if (authorName.trim() !== '' && serialNumber.trim() !== '') {
+                const data = { author: authorName, serial: serialNumber };
+                fetch(`${apiUrl}/return-book`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    document.getElementById('authorNameReturn').value = ''; // Reset input
+                    document.getElementById('serialNumberReturn').value = ''; // Reset input
+                })
+                .catch(error => console.error('Error returning book:', error));
+            } else {
+                alert('Please enter both author name and serial number.');
+            }
+        });
+
+        // Pay Fine
+        document.getElementById('payFineBtn').addEventListener('click', function () {
+            const serialNumber = document.getElementById('fineSerialNumber').value;
+            if (serialNumber.trim() !== '') {
+                const data = { serial: serialNumber };
+                fetch(`${apiUrl}/pay-fine`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    document.getElementById('fineSerialNumber').value = ''; // Reset input
+                })
+                .catch(error => console.error('Error paying fine:', error));
+            } else {
+                alert('Please enter a serial number.');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="search-results">
+        <h1>Search Results</h1>
+
+        <!-- Book Availability Section -->
+        <section id="bookAvailability">
+            <h2>Is Book Available?</h2>
+            <p id="searchTerm"></p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Book Name</th>
+                        <th>Author Name</th>
+                        <th>Serial Number</th>
+                        <th>Available</th>
+                        <th>Select to Issue</th>
+                    </tr>
+                </thead>
+                <tbody id="bookResultsBody">
+                    <!-- Dynamic rows will be inserted here -->
+                </tbody>
+            </table>
+            <button id="issueBookBtn">Issue Selected Books</button>
+            <p id="issueResult"></p>
+        </section>
+
+        <!-- Log Out Button -->
+        <button id="logoutBtn">Log Out</button>
+    </div>
+
+    <script>
+        // Function to get query parameters from the URL
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        // Get book code from query parameters
+        const bookCode = getQueryParam('bookName'); // Assuming bookCode is passed as bookName
+        
+        // Display the search term
+        document.getElementById('searchTerm').textContent = `Search results for: "${bookCode}"`;
+
+        // Simulated book data (update this with actual book data if needed)
+        const books = [
+            { name: 'Science Book 1', author: 'Author A', serial: 'SC000001', available: true },
+            { name: 'Science Book 2', author: 'Author B', serial: 'SC000002', available: true },
+            { name: 'Economics Book 1', author: 'Author C', serial: 'EC000001', available: false },
+            { name: 'Fiction Book 1', author: 'Author D', serial: 'FC000001', available: true },
+            { name: 'Children Book 1', author: 'Author E', serial: 'CH000001', available: true },
+            { name: 'Personal Development Book 1', author: 'Author F', serial: 'PD000001', available: true },
+        ];
+
+        // Function to display books in the table
+        function displayBooks(filteredBooks) {
+            const tableBody = document.getElementById('bookResultsBody');
+            tableBody.innerHTML = ''; // Clear previous results
+            if (filteredBooks.length > 0) {
+                filteredBooks.forEach(book => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${book.name}</td>
+                        <td>${book.author}</td>
+                        <td>${book.serial}</td>
+                        <td>${book.available ? 'Yes' : 'No'}</td>
+                        <td><input type="checkbox" ${book.available ? '' : 'disabled'} value="${book.serial}"></td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            } else {
+                tableBody.innerHTML = '<tr><td colspan="5">No books found.</td></tr>';
+            }
+        }
+
+        // Filter and display search results based on the book code
+        function filterBooks() {
+            if (bookCode) {
+                const filteredBooks = books.filter(book => book.serial.toLowerCase().includes(bookCode.toLowerCase()));
+                displayBooks(filteredBooks);
+            } else {
+                document.getElementById('bookResultsBody').innerHTML = '<tr><td colspan="5">No search term provided.</td></tr>';
+            }
+        }
+
+        // Call filter function on page load
+        filterBooks();
+
+        // Issue book logic
+        document.getElementById('issueBookBtn').addEventListener('click', function () {
+            const selectedBooks = [];
+            document.querySelectorAll('input[type="checkbox"]:checked').forEach((checkbox) => {
+                selectedBooks.push(checkbox.value);
+            });
+            if (selectedBooks.length > 0) {
+                document.getElementById('issueResult').textContent = `Books with serial numbers: ${selectedBooks.join(", ")} have been issued.`;
+            } else {
+                document.getElementById('issueResult').textContent = "No books selected for issuing.";
+            }
+        });
+
+        // Log Out
+        document.getElementById('logoutBtn').addEventListener('click', function () {
+            window.location.href = 'logout.html';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Membership</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="update-membership">
+        <h1>Update Membership</h1>
+
+        <form id="updateMembershipForm">
+            <div class="form-group">
+                <label for="membershipNumber">Membership Number:</label>
+                <input type="text" id="membershipNumber" name="membershipNumber" required>
+            </div>
+
+            <div class="form-group">
+                <label for="startDate">Start Date:</label>
+                <input type="date" id="startDate" name="startDate" required>
+            </div>
+
+            <div class="form-group">
+                <label for="endDate">End Date:</label>
+                <input type="date" id="endDate" name="endDate" required>
+            </div>
+
+            <div class="form-group">
+                <label>Membership Extension:</label>
+                <div>
+                    <input type="radio" id="sixMonths" name="membershipExtension" value="6 Months">
+                    <label for="sixMonths">Six Months</label>
+                </div>
+                <div>
+                    <input type="radio" id="oneYear" name="membershipExtension" value="1 Year">
+                    <label for="oneYear">One Year</label>
+                </div>
+                <div>
+                    <input type="radio" id="twoYears" name="membershipExtension" value="2 Years">
+                    <label for="twoYears">Two Years</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Membership Removal:</label>
+                <div>
+                    <input type="radio" id="removeMembership" name="membershipRemoval" value="Remove">
+                    <label for="removeMembership">Remove Membership</label>
+                </div>
+            </div>
+
+            <button type="submit">Update</button>
+        </form>
+
+        <button id="logoutBtn">Log Out</button>
+    </div>
+
+    <script>
+        // Function to get query parameters from the URL
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        // Fetch current membership details based on membership number
+        function fetchMembershipDetails() {
+            const membershipNumber = getQueryParam('membershipNumber');
+            if (membershipNumber) {
+                fetch(`http://localhost:3000/api/memberships/${membershipNumber}`) // Update with your API URL
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('membershipNumber').value = data.membershipNumber;
+                        document.getElementById('startDate').value = data.startDate;
+                        document.getElementById('endDate').value = data.endDate;
+                        document.querySelector(`input[name="membershipExtension"][value="${data.membershipExtension}"]`).checked = true;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching membership details:', error);
+                        alert('There was an error fetching the membership details. Please try again.');
+                    });
+            }
+        }
+
+        // Form submission
+        document.getElementById('updateMembershipForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            const membershipNumber = document.getElementById('membershipNumber').value;
+
+            fetch(`http://localhost:3000/api/memberships/${membershipNumber}`, { // Update with your API URL
+                method: 'PUT',
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Membership updated successfully!');
+                } else {
+                    throw new Error('Error updating membership.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('There was an error updating the membership. Please try again.');
+            });
+        });
+
+        // Call the function to fetch current membership details when the page loads
+        window.onload = fetchMembershipDetails;
+
+        // Log Out
+        document.getElementById('logoutBtn').addEventListener('click', function () {
+            window.location.href = 'logout.html';
+        });
+    </script>
+</body>
+</html>

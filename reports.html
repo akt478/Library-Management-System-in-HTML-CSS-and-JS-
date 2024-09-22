@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+            background-color: #4CAF50; /* Green */
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #45a049; /* Darker green */
+        }
+    </style>
+</head>
+<body>
+    <div class="reports">
+        <h1>Reports</h1>
+        
+        <div>
+            <a href="master-list-books.html" class="button">Master List of Books</a>
+            <a href="master-list-movies.html" class="button">Master List of Movies</a>
+            <a href="list-of-active-memberships.html" class="button">List of Active Memberships</a>
+            <a href="active-issues.html" class="button">Active Issues</a>
+            <a href="overdue-returns.html" class="button">Overdue Returns</a>
+            <a href="issue-requests.html" class="button">Issue Requests</a>
+        </div>
+
+        <button id="logoutBtn" class="button">Log Out</button>
+    </div>
+
+    <script>
+        // Log Out
+        document.getElementById('logoutBtn').addEventListener('click', function () {
+            window.location.href = 'logout.html';
+        });
+    </script>
+</body>
+</html>

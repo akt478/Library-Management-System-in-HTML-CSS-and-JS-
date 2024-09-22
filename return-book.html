@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Return Book</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="return-book">
+        <h1>Return Book</h1>
+
+        <form id="returnBookForm">
+            <label for="bookName">Book Name:</label>
+            <input type="text" id="bookName" name="bookName" readonly>
+            <br><br>
+
+            <label for="authorName">Author Name:</label>
+            <textarea id="authorName" name="authorName" readonly></textarea>
+            <br><br>
+
+            <label for="serialNumber">Serial Number:</label>
+            <select id="serialNumber" name="serialNumber" required>
+                <option value="">Select Serial Number</option>
+                <!-- Options will be populated dynamically -->
+            </select>
+            <br><br>
+
+            <label for="issueDate">Issue Date:</label>
+            <input type="text" id="issueDate" name="issueDate" readonly>
+            <br><br>
+
+            <label for="returnDate">Return Date:</label>
+            <input type="date" id="returnDate" name="returnDate" required>
+            <br><br>
+
+            <label for="remarks">Remarks (Optional):</label>
+            <textarea id="remarks" name="remarks"></textarea>
+            <br><br>
+
+            <button type="submit">Submit</button>
+        </form>
+
+        <button id="logoutBtn">Log Out</button>
+    </div>
+
+    <script>
+        // Function to get query parameters from the URL
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        // Get author name from query parameters
+        const authorName = getQueryParam('authorName');
+
+        // Populate the form with book details
+        document.getElementById('authorName').value = authorName;
+        // Populate other fields as needed
+
+        // Handle form submission
+        document.getElementById('returnBookForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const serialNumber = document.getElementById('serialNumber').value;
+            const returnDate = document.getElementById('returnDate').value;
+            const remarks = document.getElementById('remarks').value;
+
+            // Handle book returning logic here
+            alert(`Book returned.\nSerial Number: ${serialNumber}\nReturn Date: ${returnDate}\nRemarks: ${remarks}`);
+        });
+
+        // Log Out
+        document.getElementById('logoutBtn').addEventListener('click', function () {
+            window.location.href = 'logout.html';
+        });
+
+        // Example function to populate serial numbers (update with actual logic)
+        function populateSerialNumbers() {
+            const serialNumberSelect = document.getElementById('serialNumber');
+            const serialNumbers = ['SC000001', 'EC000002', 'FC000003']; // Example serial numbers
+
+            serialNumbers.forEach(serial => {
+                const option = document.createElement('option');
+                option.value = serial;
+                option.textContent = serial;
+                serialNumberSelect.appendChild(option);
+            });
+        }
+
+        populateSerialNumbers();
+    </script>
+</body>
+</html>

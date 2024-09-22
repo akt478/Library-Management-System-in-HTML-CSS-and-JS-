@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master List of Books</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="master-list-books">
+        <h1>Master List of Books</h1>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Serial No</th>
+                    <th>Name of Book</th>
+                    <th>Author Name</th>
+                    <th>Category</th>
+                    <th>Status</th>
+                    <th>Cost</th>
+                    <th>Procurement Date</th>
+                </tr>
+            </thead>
+            <tbody id="bookTableBody">
+                <!-- Book data will be inserted here -->
+            </tbody>
+        </table>
+
+        <button id="logoutBtn">Log Out</button>
+    </div>
+
+    <script>
+        // Fetch book data from the database
+        function fetchBooks() {
+            fetch('http://localhost:3000/api/books') // Update with your API URL
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.getElementById('bookTableBody');
+                    tableBody.innerHTML = ''; // Clear existing rows
+
+                    data.forEach(book => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${book.serialNo}</td>
+                            <td>${book.name}</td>
+                            <td>${book.author}</td>
+                            <td>${book.category}</td>
+                            <td>${book.status}</td>
+                            <td>${book.cost}</td>
+                            <td>${book.procurementDate}</td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching books:', error);
+                    alert('There was an error fetching the book data. Please try again.');
+                });
+        }
+
+        // Call the function to fetch books when the page loads
+        window.onload = fetchBooks;
+
+        // Log Out
+        document.getElementById('logoutBtn').addEventListener('click', function () {
+            window.location.href = 'logout.html';
+        });
+    </script>
+</body>
+</html>

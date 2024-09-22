@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pay Fine</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="pay-fine">
+        <h1>Pay Fine</h1>
+
+        <form id="payFineForm">
+            <label for="bookName">Book Name:</label>
+            <input type="text" id="bookName" name="bookName" readonly>
+            <br><br>
+
+            <label for="authorName">Author Name:</label>
+            <input type="text" id="authorName" name="authorName" readonly>
+            <br><br>
+
+            <label for="serialNumber">Serial Number:</label>
+            <input type="text" id="serialNumber" name="serialNumber" readonly>
+            <br><br>
+
+            <label for="issueDate">Issue Date:</label>
+            <input type="date" id="issueDate" name="issueDate" readonly>
+            <br><br>
+
+            <label for="returnDate">Return Date:</label>
+            <input type="date" id="returnDate" name="returnDate" readonly>
+            <br><br>
+
+            <label for="actualReturnDate">Actual Return Date:</label>
+            <input type="date" id="actualReturnDate" name="actualReturnDate" required>
+            <br><br>
+
+            <label for="fineCalculated">Fine Calculated:</label>
+            <input type="text" id="fineCalculated" name="fineCalculated" readonly value="0">
+            <br><br>
+
+            <label for="finePaid">Fine Paid:</label>
+            <input type="checkbox" id="finePaid" name="finePaid">
+            <br><br>
+
+            <label for="remarks">Remarks (Optional):</label>
+            <textarea id="remarks" name="remarks"></textarea>
+            <br><br>
+
+            <button type="submit">Submit</button>
+        </form>
+
+        <button id="logoutBtn">Log Out</button>
+    </div>
+
+    <script>
+        // Function to get query parameters from the URL
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        // Get serial number from query parameters
+        const serialNumber = getQueryParam('serialNumber');
+
+        // Populate the form with book details
+        document.getElementById('serialNumber').value = serialNumber;
+
+        // Fetch book details from the server
+        fetch(`http://localhost:3000/api/books/${serialNumber}`)
+            .then(response => response.json())
+            .then(book => {
+                document.getElementById('bookName').value = book.name;
+                document.getElementById('authorName').value = book.author_name;
+                document.getElementById('issueDate').value = book.issue_date; // Adjust according to your DB structure
+                document.getElementById('returnDate').value = book.return_date; // Adjust according to your DB structure
+                document.getElementById('fineCalculated').value = book.fine; // Adjust according to your DB structure
+            })
+            .catch(error => console.error('Error fetching book details:', error));
+
+        // Handle form submission
+        document.getElementById('payFineForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const actualReturnDate = document.getElementById('actualReturnDate').value;
+            const finePaid = document.getElementById('finePaid').checked;
+            const remarks = document.getElementById('remarks').value;
+
+            const data = {
+                serialNumber: serialNumber,
+                actualReturnDate: actualReturnDate,
+                finePaid: finePaid,
+                remarks: remarks
+            };
+
+            // Send fine payment details to the server
+            fetch(`http://localhost:3000/api/pay-fine`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
+            .then(result => {
+                alert(result);
+                // Optionally, redirect or reset the form here
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to process fine payment: ' + error.message);
+            });
+        });
+
+        // Log Out
+        document.getElementById('logoutBtn').addEventListener('click', function () {
+            window.location.href = 'logout.html';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Book/Movie</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="add-book-movie">
+        <h1>Add Book/Movie</h1>
+
+        <form id="addBookMovieForm" onsubmit="event.preventDefault(); addBookMovie();">
+            <div class="form-group">
+                <label>Type:</label>
+                <div>
+                    <input type="radio" id="book" name="type" value="Book" checked>
+                    <label for="book">Book</label>
+                </div>
+                <div>
+                    <input type="radio" id="movie" name="type" value="Movie">
+                    <label for="movie">Movie</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="name">Book/Movie Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="procurementDate">Date of Procurement:</label>
+                <input type="date" id="procurementDate" name="procurementDate" required>
+            </div>
+
+            <div class="form-group">
+                <label for="quantity">Quantity/Copies:</label>
+                <input type="number" id="quantity" name="quantity" value="1" min="1" required>
+            </div>
+
+            <button type="submit">Add</button>
+        </form>
+
+        <button id="logoutBtn">Log Out</button>
+    </div>
+
+    <script>
+        // Log Out
+        document.getElementById('logoutBtn').addEventListener('click', function () {
+            window.location.href = 'logout.html';
+        });
+
+        // Function to add Book/Movie
+        function addBookMovie() {
+            const type = document.querySelector('input[name="type"]:checked').value;
+            const name = document.getElementById('name').value;
+            const procurementDate = document.getElementById('procurementDate').value;
+            const quantity = document.getElementById('quantity').value;
+
+            const bookMovie = {
+                type: type,
+                name: name,
+                procurement_date: procurementDate,
+                quantity: quantity
+            };
+
+            fetch('http://localhost:3000/api/books-movies', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(bookMovie)
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Book/Movie added successfully');
+                document.getElementById('addBookMovieForm').reset(); // Reset the form
+            })
+            .catch(error => console.error('Error adding book/movie:', error));
+        }
+    </script>
+</body>
+</html>
